@@ -27,8 +27,20 @@
 <section id="products-grid" class="py-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
     <div class="flex justify-between items-end mb-12 border-b border-outline-variant/30 pb-4">
         <div>
-            <h2 class="font-display-lg text-headline-md text-on-background uppercase font-bold tracking-tight">System.Arsenal</h2>
-            <p class="font-body-md text-body-md text-on-surface-variant mt-2">Core technical pieces. Restocked for immediate deployment.</p>
+            <h2 class="font-display-lg text-headline-md text-on-background uppercase font-bold tracking-tight">
+                @if(request()->has('search') && request('search') != '')
+                    Search Results: "{{ request('search') }}"
+                @else
+                    Our Products
+                @endif
+            </h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-2">
+                @if(request()->has('search') && request('search') != '')
+                    Found {{ $products->count() }} item(s) matching your query.
+                @else
+                    Explore our complete collection of products.
+                @endif
+            </p>
         </div>
     </div>
 
@@ -54,7 +66,7 @@
                 <div class="absolute top-4 left-4 z-10 flex gap-2">
                     @if($product->stock <= 0)
                         <span class="px-2 py-1 bg-error text-on-error font-label-bold text-[10px] uppercase tracking-wider rounded-sm">Sold Out</span>
-                    @elseif($index === 0)
+                    @elseif($product->is_limited)
                         <span class="px-2 py-1 bg-primary text-on-primary font-label-bold text-[10px] uppercase tracking-wider rounded-sm">Limited Edition</span>
                     @else
                         <span class="px-2 py-1 bg-surface-variant text-on-surface-variant font-label-bold text-[10px] uppercase tracking-wider border border-outline-variant rounded-sm">Core</span>
@@ -98,8 +110,8 @@
             <p class="font-body-md text-body-lg text-on-surface-variant mb-8 leading-relaxed">
                 {{ $settings['manifesto_desc'] ?? 'Every piece is engineered with precision. We source military-grade textiles and combine them with brutalist silhouettes for a uniform built for the modern urban landscape.' }}
             </p>
-            <a href="#" class="inline-flex items-center group border-2 border-on-background px-6 py-3 font-label-bold text-label-md uppercase tracking-widest text-primary hover:bg-on-background hover:text-surface transition-all" onclick="alert('The full LUNARA manifesto is currently classified and will be unsealed in the next phase.')">
-                Read Manifesto 
+            <a href="{{ route('collections.index') }}" class="inline-flex items-center group border-2 border-on-background px-6 py-3 font-label-bold text-label-md uppercase tracking-widest text-primary hover:bg-on-background hover:text-surface transition-all">
+                Explore Collections
                 <span class="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform">arrow_forward</span>
             </a>
         </div>

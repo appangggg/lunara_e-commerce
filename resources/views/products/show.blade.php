@@ -62,40 +62,58 @@
                 <span class="font-body-md text-label-sm text-on-surface-variant uppercase">{{ $product->stock > 0 ? $product->stock . ' Units Available' : 'Out of Stock' }}</span>
             </div>
 
-            <!-- Variants / Size Selector (Dummy UX) -->
-            <div class="mt-8">
+            @php $sizes = $product->getSizes(); @endphp
+
+            {{-- Dynamic Size Selector --}}
+            @if(count($sizes) > 0)
+            <div class="mt-8" x-data="{ selected: '{{ $sizes[count($sizes) > 2 ? 1 : 0] }}' }">
                 <div class="flex justify-between items-center mb-4">
-                    <span class="font-label-bold text-label-bold text-on-background uppercase tracking-widest">Size</span>
-                    <a href="#" class="font-body-md text-label-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4">Size Guide</a>
+                    <span class="font-label-bold text-label-bold text-on-background uppercase tracking-widest">
+                        {{ $product->category === 'shoes' ? 'Shoe Size (EU)' : 'Size' }}
+                    </span>
                 </div>
-                <div class="grid grid-cols-4 sm:grid-cols-5 gap-3">
-                    <button class="py-3 border border-outline-variant/50 text-on-surface-variant font-label-bold text-label-bold uppercase hover:border-primary hover:text-primary transition-colors rounded">S</button>
-                    <button class="py-3 border-2 border-primary bg-primary/10 text-primary font-label-bold text-label-bold uppercase rounded shadow-[0_0_10px_rgba(0,107,95,0.2)]">M</button>
-                    <button class="py-3 border border-outline-variant/50 text-on-surface-variant font-label-bold text-label-bold uppercase hover:border-primary hover:text-primary transition-colors rounded">L</button>
-                    <button class="py-3 border border-outline-variant/50 text-on-surface-variant font-label-bold text-label-bold uppercase hover:border-primary hover:text-primary transition-colors rounded">XL</button>
-                    <button class="py-3 border border-error/50 text-error/50 font-label-bold text-label-bold uppercase cursor-not-allowed rounded opacity-50 line-through">XXL</button>
+                <div class="flex flex-wrap gap-3">
+                    @foreach($sizes as $size)
+                    <button
+                        type="button"
+                        onclick="selectSize('{{ $size }}')"
+                        id="size-btn-{{ $size }}"
+                        class="size-btn py-2.5 px-4 border border-outline-variant/50 text-on-surface-variant hover:border-primary hover:text-primary font-label-bold text-label-bold uppercase transition-colors rounded">
+                        {{ $size }}
+                    </button>
+                    @endforeach
                 </div>
+                <input type="hidden" id="selected_size_input" value="{{ $sizes[count($sizes) > 2 ? 1 : 0] }}">
             </div>
+            @endif
 
             <!-- Actions -->
-            <div class="mt-12 flex flex-col space-y-4">
+            <div class="mt-8 flex flex-col space-y-4">
+                @if(session('success'))
+                    <div class="p-4 mb-4 text-sm text-primary bg-primary/10 border border-primary rounded-lg flex items-center" role="alert">
+                        <span class="material-symbols-outlined mr-2">check_circle</span>
+                        {{ session('success') }}
+                    </div>
+                @endif
                 @if(session('error'))
                     <div class="p-4 mb-4 text-sm text-error bg-error-container rounded-lg" role="alert">
                         {{ session('error') }}
                     </div>
                 @endif
-                <form action="{{ route('checkout.init') }}" method="POST">
+                <form action="{{ route('checkout.init') }}" method="POST" id="form-checkout">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="selected_size" id="size_checkout" value="">
                     <button type="submit" @if($product->stock <= 0) disabled @endif class="w-full py-4 {{ $product->stock <= 0 ? 'bg-surface-variant text-on-surface-variant cursor-not-allowed' : 'bg-primary text-on-primary hover:bg-opacity-90 glow-effect' }} font-label-bold text-label-bold uppercase tracking-widest transition-colors rounded">
                         {{ $product->stock <= 0 ? 'Sold Out' : 'Direct Checkout' }}
                     </button>
                 </form>
-                <form action="{{ route('cart.add') }}" method="POST" class="mt-2">
+                <form action="{{ route('cart.add') }}" method="POST" class="mt-2" id="form-cart">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="selected_size" id="size_cart" value="">
                     <button type="submit" @if($product->stock <= 0) disabled @endif class="w-full py-4 border border-outline-variant {{ $product->stock <= 0 ? 'text-on-surface-variant cursor-not-allowed' : 'text-on-background hover:border-primary' }} font-label-bold text-label-bold uppercase tracking-widest transition-colors rounded">
                         Add to Cart
                     </button>
@@ -137,4 +155,51 @@
         </div>
     </div>
 </div>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Sync initial selected size into hidden form inputs
+        const sizeInput = document.getElementById('selected_size_input');
+        if (sizeInput && sizeInput.value) {
+            const el = document.getElementById('size_checkout');
+            const el2 = document.getElementById('size_cart');
+            if (el) el.value = sizeInput.value;
+            if (el2) el2.value = sizeInput.value;
+
+            // Visually mark the default selected button
+            const defaultBtn = document.getElementById('size-btn-' + sizeInput.value);
+            if (defaultBtn) markActive(defaultBtn);
+        }
+    });
+
+    function markActive(btn) {
+        document.querySelectorAll('.size-btn').forEach(b => {
+            b.style.border = '';
+            b.style.color = '';
+            b.style.background = '';
+            b.style.fontWeight = '';
+        });
+        btn.style.border = '2px solid var(--color-primary, #00796B)';
+        btn.style.color = 'var(--color-primary, #00796B)';
+        btn.style.background = 'rgba(0, 121, 107, 0.08)';
+        btn.style.fontWeight = '700';
+    }
+
+    function selectSize(size) {
+        // Update hidden inputs
+        const el  = document.getElementById('size_checkout');
+        const el2 = document.getElementById('size_cart');
+        if (el)  el.value  = size;
+        if (el2) el2.value = size;
+
+        // Update sizeInput tracker
+        const sizeInput = document.getElementById('selected_size_input');
+        if (sizeInput) sizeInput.value = size;
+
+        // Highlight active button
+        const activeBtn = document.getElementById('size-btn-' + size);
+        if (activeBtn) markActive(activeBtn);
+    }
+</script>
+@endpush
 @endsection

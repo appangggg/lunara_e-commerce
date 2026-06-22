@@ -33,10 +33,12 @@ class AdminController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
+            'category' => 'required|in:clothing,shoes,accessories',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']);
+        $validated['is_limited'] = $request->has('is_limited');
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
@@ -63,10 +65,12 @@ class AdminController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
+            'category' => 'required|in:clothing,shoes,accessories',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']);
+        $validated['is_limited'] = $request->has('is_limited');
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');

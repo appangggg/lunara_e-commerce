@@ -9,10 +9,17 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Get all products, order by ID descending
-        $products = Product::all();
+        $query = Product::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $searchTerm = $request->search;
+            $query->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%');
+        }
+
+        $products = $query->get();
         $settings = \App\Models\Setting::pluck('value', 'key');
         return view('products.index', compact('products', 'settings'));
     }

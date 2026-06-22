@@ -47,6 +47,25 @@
             </div>
 
             <div>
+                <label for="category" class="block font-label-bold text-label-sm uppercase tracking-widest text-on-background mb-2">Product Category</label>
+                <select id="category" name="category" required class="w-full bg-surface border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary transition-colors">
+                    <option value="clothing" {{ old('category') === 'clothing' ? 'selected' : '' }}>Pakaian / Clothing (Sizes: S, M, L, XL)</option>
+                    <option value="shoes" {{ old('category') === 'shoes' ? 'selected' : '' }}>Sepatu / Shoes (Sizes: 32–44 EU)</option>
+                    <option value="accessories" {{ old('category') === 'accessories' ? 'selected' : '' }}>Aksesoris / Accessories (No size selector)</option>
+                </select>
+                @error('category')<span class="text-error text-sm mt-1 block">{{ $message }}</span>@enderror
+                <p class="text-[10px] text-on-surface-variant mt-1 uppercase tracking-widest">Category determines which size options appear on the product page.</p>
+            </div>
+
+            <div class="flex items-center space-x-3 p-4 bg-surface border border-outline-variant rounded-lg">
+                <input type="checkbox" id="is_limited" name="is_limited" class="w-5 h-5 accent-primary bg-surface border-outline-variant rounded focus:ring-primary transition-colors" {{ old('is_limited') ? 'checked' : '' }}>
+                <div>
+                    <label for="is_limited" class="font-label-bold text-label-sm uppercase tracking-widest text-on-background cursor-pointer">Limited Edition Status</label>
+                    <p class="text-[10px] text-on-surface-variant mt-1 uppercase tracking-widest">Check this box to flag the item as a limited edition drop.</p>
+                </div>
+            </div>
+
+            <div>
                 <label for="description" class="block font-label-bold text-label-sm uppercase tracking-widest text-on-background mb-2">Technical Description</label>
                 <textarea id="description" name="description" required rows="5" class="w-full bg-surface border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary transition-colors">{{ old('description') }}</textarea>
                 @error('description')<span class="text-error text-sm mt-1 block">{{ $message }}</span>@enderror

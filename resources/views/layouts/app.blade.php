@@ -29,7 +29,7 @@
 
             <!-- Trailing Icons -->
             <div class="flex items-center space-x-6 text-primary">
-                <button aria-label="Search" class="hover:text-primary transition-all duration-300" onclick="alert('Search module is currently offline for maintenance. Browse Collections or Drops instead.')">
+                <button aria-label="Search" class="hover:text-primary transition-all duration-300" onclick="document.getElementById('search-drawer').classList.toggle('translate-x-full')">
                     <span class="material-symbols-outlined" data-icon="search">search</span>
                 </button>
                 <button aria-label="shopping_cart" class="hover:text-primary transition-all duration-300" onclick="document.getElementById('cart-drawer').classList.toggle('translate-x-full')">
@@ -65,7 +65,7 @@
                 @endauth
 
                 <!-- Mobile Menu Toggle -->
-                <button class="md:hidden text-on-background hover:text-primary transition-colors">
+                <button class="md:hidden text-on-background hover:text-primary transition-colors" onclick="document.getElementById('mobile-menu').classList.toggle('translate-x-full')">
                     <span class="material-symbols-outlined" data-icon="menu">menu</span>
                 </button>
             </div>
@@ -109,5 +109,12 @@
     <!-- Include Cart Drawer -->
     @include('components.cart-drawer')
 
+    <!-- Include Search Drawer -->
+    @include('components.search-drawer')
+
+    <!-- Include Mobile Menu -->
+    @include('components.mobile-menu')
+
+    @stack('scripts')
 </body>
 </html>

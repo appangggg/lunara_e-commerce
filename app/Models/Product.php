@@ -19,7 +19,23 @@ class Product extends Model
         'stock',
         'image_url',
         'is_limited',
+        'category',
     ];
+
+    /**
+     * Returns size options based on product category.
+     * clothing => S, M, L, XL
+     * shoes    => 32, 33, ... 44
+     * other    => [] (no size)
+     */
+    public function getSizes(): array
+    {
+        return match($this->category) {
+            'clothing' => ['S', 'M', 'L', 'XL'],
+            'shoes'    => ['32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44'],
+            default    => [],
+        };
+    }
 
     public function orderItems()
     {

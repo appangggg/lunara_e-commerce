@@ -11,7 +11,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ route('admin.settings.update') }}" class="space-y-6">
+    <form method="POST" action="{{ route('admin.settings.update') }}" class="space-y-6" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         
@@ -51,10 +51,23 @@
                     </div>
 
                     <div>
-                        <label for="hero_bg_image" class="block font-label-bold text-label-sm uppercase tracking-widest text-on-background mb-2">Background Image URL</label>
-                        <input type="url" id="hero_bg_image" name="hero_bg_image" required value="{{ old('hero_bg_image', $settings['hero_bg_image'] ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuCzbucB7MEK_ZRwIMMcIi-r2TEJH7u69T3cNVqSKbd1Tr192UKAySJojSMh-JKCIfNNKD5u80RrdBVqiccBNPBjw6RMvjme4WGQguxMmXMflmx_xbj-5XmdoRkMwsia5R3xzcO8HbnTMqtP6P4uniaZz6xzVp0NmCKWOI0SZN7Bqmv6DKs4qwiFSrs9CdXpsiMp2f--q41BwwmBGSdUvDwEQn3b-z6mSUD1eFVP9ey8Wy61wQtOR1SrVsSDv_GO_66Y1l-zY148EK4') }}" class="w-full bg-surface border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary transition-colors">
-                        @error('hero_bg_image')<span class="text-error text-sm mt-1 block">{{ $message }}</span>@enderror
-                        <p class="text-xs text-on-surface-variant mt-2">Provide a direct URL to the image.</p>
+                        <label class="block font-label-bold text-label-sm uppercase tracking-widest text-on-background mb-2">Background Image</label>
+                        
+                        <div class="space-y-4">
+                            <!-- File Upload Option -->
+                            <div>
+                                <label for="hero_bg_image_file" class="block text-xs text-on-surface-variant mb-1">Upload New Image File:</label>
+                                <input type="file" id="hero_bg_image_file" name="hero_bg_image_file" accept="image/*" class="w-full bg-surface border border-outline-variant rounded p-2 text-on-background focus:ring-primary focus:border-primary transition-colors file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-on-primary hover:file:bg-primary/90">
+                                @error('hero_bg_image_file')<span class="text-error text-sm mt-1 block">{{ $message }}</span>@enderror
+                            </div>
+
+                            <!-- URL Option -->
+                            <div>
+                                <label for="hero_bg_image" class="block text-xs text-on-surface-variant mb-1">Or use existing Image URL:</label>
+                                <input type="url" id="hero_bg_image" name="hero_bg_image" value="{{ old('hero_bg_image', $settings['hero_bg_image'] ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuCzbucB7MEK_ZRwIMMcIi-r2TEJH7u69T3cNVqSKbd1Tr192UKAySJojSMh-JKCIfNNKD5u80RrdBVqiccBNPBjw6RMvjme4WGQguxMmXMflmx_xbj-5XmdoRkMwsia5R3xzcO8HbnTMqtP6P4uniaZz6xzVp0NmCKWOI0SZN7Bqmv6DKs4qwiFSrs9CdXpsiMp2f--q41BwwmBGSdUvDwEQn3b-z6mSUD1eFVP9ey8Wy61wQtOR1SrVsSDv_GO_66Y1l-zY148EK4') }}" class="w-full bg-surface border border-outline-variant rounded p-3 text-on-background focus:ring-primary focus:border-primary transition-colors">
+                                @error('hero_bg_image')<span class="text-error text-sm mt-1 block">{{ $message }}</span>@enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
