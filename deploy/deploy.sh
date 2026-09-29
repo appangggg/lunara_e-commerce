@@ -129,7 +129,7 @@ if [ "$IS_FIRST_DEPLOY" = true ]; then
     sudo cp $APP_DIR/deploy/nginx/lunara.conf /etc/nginx/sites-available/lunara
     sudo ln -sf /etc/nginx/sites-available/lunara /etc/nginx/sites-enabled/lunara
     sudo rm -f /etc/nginx/sites-enabled/default
-    sudo nginx -t && sudo systemctl reload nginx
+    sudo nginx -t && sudo systemctl restart nginx
     log_ok "Nginx configured."
     
     # Setup .env
