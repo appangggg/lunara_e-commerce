@@ -1,6 +1,5 @@
 <?php
 
-// Coded by: Muh. Asyfar Arifin Liwan (NIM: 60200124013)
 
 namespace App\Models;
 

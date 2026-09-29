@@ -1,6 +1,5 @@
 <?php
 
-// Coded by: Muh. Asyfar Arifin Liwan (NIM: 60200124013)
 
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\GoogleAuthController;

@@ -1,0 +1,35 @@
+Penjelasan Hasil Pengujian (Testing) Sistem Lunara
+===================================================
+
+Hasil di atas menunjukkan bahwa kita telah melakukan pengujian otomatis (Automated Testing) pada sistem e-commerce kita. Terdapat 15 skenario pengujian yang dijalankan, dan semuanya BERHASIL LULUS (Passed). Artinya, fitur-fitur yang kita tes berjalan dengan baik dan sesuai harapan tanpa error.
+
+Berikut adalah rincian apa saja yang dites di masing-masing bagian:
+
+1. UNIT TEST (Pengujian Logika Internal)
+Unit test digunakan untuk menguji logika bagian terkecil dari sistem kita, biasanya pada level Model.
+- ExampleTest: Tes bawaan sistem untuk memastikan fitur unit test berjalan (that true is true).
+- ProductUnitTest: Menguji sistem penentuan ukuran produk berdasarkan kategorinya.
+  * Memastikan baju (clothing) mengembalikan opsi ukuran huruf (S, M, L, XL).
+  * Memastikan sepatu (shoes) mengembalikan opsi ukuran angka (32, 33, dll).
+  * Memastikan kategori lain (aksesori, dll) tidak mengembalikan ukuran.
+
+2. FEATURE TEST (Pengujian Fitur Pengguna)
+Feature test digunakan untuk mensimulasikan cara pengguna (user) berinteraksi dengan website kita.
+- AuthTest (Fitur Autentikasi):
+  * Memastikan halaman Form Login bisa dibuka.
+  * Memastikan halaman Form Register (Daftar) bisa dibuka.
+  * Memastikan pengguna bisa Login menggunakan email dan password yang benar.
+  * Memastikan pengguna GAGAL Login (ditolak) jika memasukkan password yang salah.
+  * Memastikan pengguna baru bisa mendaftarkan akun.
+  * Memastikan pengguna yang sudah login bisa Logout dengan aman.
+  
+- ExampleTest: Tes bawaan sistem untuk memastikan halaman utama website bisa dimuat dengan sukses (response 200).
+
+- ProductFeatureTest (Fitur Produk & Katalog):
+  * Memastikan halaman utama katalog produk bisa menampilkan daftar produk yang ada.
+  * Memastikan fitur pencarian (Search) berfungsi dengan baik untuk menyaring produk.
+  * Memastikan halaman "Detail Produk" bisa diakses jika produk tersebut memang ada.
+  * Memastikan sistem menampilkan pesan "404 Not Found" jika pengguna mencari produk yang tidak ada.
+
+KESIMPULAN:
+Pengujian ini membuktikan bahwa fitur utama sistem seperti Autentikasi (Login/Register) dan Katalog Produk (Tampil, Cari, Detail) serta logika penentuan ukurannya sudah berfungsi dengan sangat baik dan siap digunakan.
