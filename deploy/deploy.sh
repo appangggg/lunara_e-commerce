@@ -46,11 +46,12 @@ if [ "$IS_FIRST_DEPLOY" = true ]; then
     
     # Update system
     log_info "Updating system packages..."
-    sudo apt update && sudo apt upgrade -y
+    sudo env DEBIAN_FRONTEND=noninteractive apt-get update
+    sudo env NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
     
     # Install dependencies
     log_info "Installing required packages..."
-    sudo apt install -y \
+    sudo env NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt-get install -y \
         nginx \
         mysql-server \
         git \
