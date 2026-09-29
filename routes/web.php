@@ -30,8 +30,7 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/add-drop', [CartController::class, 'addDrop'])->name('cart.add-drop');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 
-// Webhook Route
-Route::post('/api/webhook/midtrans', [\App\Http\Controllers\MidtransWebhookController::class, 'handle'])->name('api.webhook.midtrans');
+
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
